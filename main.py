@@ -1,7 +1,7 @@
 from flask import Flask, request, redirect
 from flask import render_template
 from _wordler import Wordler
-
+from get_definition import get_word_definition
 app = Flask(__name__)
 app.secret_key = 'fdslkfgjslgj'
 
@@ -30,6 +30,7 @@ def new_game(letters_in_word):
 def start(letters_in_word, pin):
     letters_in_word=int(letters_in_word)
     w = Wordler()
+    show_definition=True
     if pin=='':
         return redirect(f'{request.url_root}wordler')
     if request.query_string:
@@ -66,20 +67,22 @@ def start(letters_in_word, pin):
         words_and_scores = w.set_and_return_words_and_scores(pin=pin, words=words)
         wl=w.words_left
         if guess_word == 'help':
-            message = f'There are {len(wl)} possible words remaining {wl if len(wl) < 10 else str(wl[:10])[:-1] + ", ...]"}'
+            message = [f'There are {len(wl)} possible words remaining {wl if len(wl) < 10 else str(wl[:10])[:-1] + ", ...]"}']
         elif len(guess_word) != letters_in_word:
-            message = f'Word must have {letters_in_word} letters'
+            message = [f'Word must have {letters_in_word} letters']
         elif guess_word not in w.allowed_words:
-            message = f'Invalid word "{guess_word}"'
+            message = [f'Invalid word "{guess_word}"']
         else:
             result = w.guess(guess_word)
             words_and_scores[guess_word.upper()] = result
             wl=w.words_left
             if result == '2'* letters_in_word:
-                message= f'Congratulations! you did it in {len(words_and_scores)} goes.'
+                message= [f'Congratulations! you did it in {len(words_and_scores)} goes.']
             else:
-                message = f'There are {len(wl)} possible words remaining.'
-
+                message = [f'There are {len(wl)} possible words remaining.']
+            if show_definition:
+                if show_definition is True:
+                    message = get_word_definition(guess_word) + message
     top_row=w.get_letters('QWERTYUIOP')
     second_row = w.get_letters('ASDFGHJKL')
     third_row = w.get_letters('ZXCVBNM')
