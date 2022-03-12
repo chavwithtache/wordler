@@ -1,0 +1,25 @@
+.margin-left {
+    margin-left:clamp(6px, 2vw, 18px)
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+
+.font-size-3 {
+ font-size: clamp(9px, 3vw, 27px)
+}
+
+.font-size-4 {
+ font-size: clamp(12px, 4vw, 36px)
+}
+
+.font-size-5 {
+ font-size: clamp(15px, 5vw, 45px)
+}
+
+.font-size-10 {
+ font-size: clamp(30px, 10vw, 90px)
+}

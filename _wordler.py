@@ -12,6 +12,7 @@ class Wordler(object):
         self.result_word = None
         self.pin = None
         self.letters = None
+        self.letters_in_word = 5
 
     @dataclass
     class Letters:
@@ -20,42 +21,54 @@ class Wordler(object):
         yellow_letters: str = ''
         green_letters: str = ''
 
-    def reset_all(self):
-        with open('words.json', 'r') as f:
+    def reset_all(self, letters_in_word:int = 5):
+        with open(f'result_words_{letters_in_word}.json', 'r') as f:
             self.result_words = json.load(f)
-        with open('allowed_words.json', 'r') as f:
+        with open(f'allowed_words_{letters_in_word}.json', 'r') as f:
             self.allowed_words = json.load(f)
+        self.letters_in_word= int(letters_in_word)
         self.words_left = [w for w in self.result_words]
         self.result_word = random.choice(self.result_words)
         self.pin = self.get_pin_from_result_word(self.result_word)
         self.letters = self.Letters()
+
+    def get_help_letter(self):
+        pass
 
     def set_and_return_words_and_scores(self, pin, words: list):
         self.reset_from_pin(pin)
         return {word.upper(): self.guess(word.lower()) for word in words}
 
     def reset_from_pin(self, pin):
-        self.reset_all()
+        # TODO Improve this. Make pin cleverer
+        if len(pin) == 5:
+            self.letters_in_word = 7
+        elif len(pin) == 3:
+            self.letters_in_word = 3
+        else:
+            self.letters_in_word = 5
+
+        self.reset_all(self.letters_in_word)
         self.pin = pin
-        self.result_word = self.get_result_word_from_pin(self.pin)
+        self.result_word = self.get_result_word_from_pin()
         self.words_left = [w for w in self.result_words]
 
-    def helper(self):
-        print('\x1B[1;32;40myou can type EXIT to quit\x1B[0m\n')
-
-        while len(self.words_left) > 0:
-            help_words = self.get_valid_help_string()
-            if help_words is None:
-                print('ok bye..')
-                return
-            word, result = help_words
-            self.words_left = self.check(word, result)
-            ws = self.words_left
-            if len(ws) == 1:
-                print(f"The word is '{ws[0]}'")
-                return
-            print(
-                f'There are {len(ws)} possible words remaining {ws if len(ws) < 10 else str(ws[:10])[:-1] + ", ...]"}')
+    # def helper(self):
+    #     print('\x1B[1;32;40myou can type EXIT to quit\x1B[0m\n')
+    #
+    #     while len(self.words_left) > 0:
+    #         help_words = self.get_valid_help_string()
+    #         if help_words is None:
+    #             print('ok bye..')
+    #             return
+    #         word, result = help_words
+    #         self.words_left = self.check(word, result)
+    #         ws = self.words_left
+    #         if len(ws) == 1:
+    #             print(f"The word is '{ws[0]}'")
+    #             return
+    #         print(
+    #             f'There are {len(ws)} possible words remaining {ws if len(ws) < 10 else str(ws[:10])[:-1] + ", ...]"}')
 
     def adjust_letters(self, guess_word, score):
         for res, letter in zip(score, guess_word.upper()):
@@ -143,12 +156,25 @@ class Wordler(object):
     #     elif self.helps > 0:
     #         print(f'...but you asked for help')
 
-    def get_result_word_from_pin(self, pin):
-        return self.result_words[(int(pin) - 2500 - date.today().toordinal()) % len(self.result_words)]
+    def get_result_word_from_pin(self):
+        # TODO Make this cleverer
+        if self.letters_in_word == 7:
+            return self.result_words[(int(self.pin) - 50000 - date.today().toordinal()) % len(self.result_words)]
+        elif self.letters_in_word == 3:
+            return self.result_words[(int(self.pin) - 100 - date.today().toordinal()) % len(self.result_words)]
+        else:
+            return self.result_words[(int(self.pin) - 2500 - date.today().toordinal()) % len(self.result_words)]
 
     def get_pin_from_result_word(self, result_word):
+        # TODO Make this cleverer
         result_index = self.result_words.index(result_word)
-        return (date.today().toordinal() + result_index) % len(self.result_words) + 2500
+        if self.letters_in_word == 7:
+            return (date.today().toordinal() + result_index) % len(self.result_words) + 50000
+        elif self.letters_in_word == 3:
+            return (date.today().toordinal() + result_index) % len(self.result_words) + 100
+        else:
+            return (date.today().toordinal() + result_index) % len(self.result_words) + 2500
+
 
     def guess(self, word: str):
         rw = self.result_word
@@ -177,7 +203,7 @@ class Wordler(object):
         for os_letter in one_score_letters_set:
             has_zeros = False
             number_of_ones = 0
-            ones_index_set = {0, 1, 2, 3, 4}
+            ones_index_set = set(range(self.letters_in_word))
             twos_index_set = set()
             for i, (letter, ws) in enumerate(zip(word_guess, wordle_score)):
                 if letter == os_letter:
@@ -244,32 +270,28 @@ class Wordler(object):
     #     return word
 
     @staticmethod
-    def random_result():
-        return ''.join([str(random.randint(0, 2)) for _ in range(5)])
-
-    @staticmethod
     def is_valid_result(result):
         for s in result:
             if s not in '012':
                 return False
         return True
 
-    def get_valid_help_string(self):
-        valid = False
-        help_words = None
-        while not valid:
-            print(
-                f'Enter 2 valid strings each with 5 characters which looks like: {random.choice(self.allowed_words).upper()} {self.random_result()}')
-            help_string = input('Enter >').lower()
-            if help_string == 'exit':
-                return None
-            help_words = help_string.split(' ')
-            if len(help_words) == 2:
-                if len(help_words[0]) == 5 and len(help_words[1]) == 5:
-                    if help_words[0] not in self.allowed_words:
-                        print(f'{help_words[0].upper()} is not a valid word')
-                    elif not self.is_valid_result(help_words[1]):
-                        print(f'{help_words[1]} must be only 0s, 1s or 2s')
-                    else:
-                        valid = True
-        return help_words[0], help_words[1]
+    # def get_valid_help_string(self):
+    #     valid = False
+    #     help_words = None
+    #     while not valid:
+    #         print(
+    #             f'Enter 2 valid strings each with 5 characters which looks like: {random.choice(self.allowed_words).upper()} {self.random_result()}')
+    #         help_string = input('Enter >').lower()
+    #         if help_string == 'exit':
+    #             return None
+    #         help_words = help_string.split(' ')
+    #         if len(help_words) == 2:
+    #             if len(help_words[0]) == 5 and len(help_words[1]) == 5:
+    #                 if help_words[0] not in self.allowed_words:
+    #                     print(f'{help_words[0].upper()} is not a valid word')
+    #                 elif not self.is_valid_result(help_words[1]):
+    #                     print(f'{help_words[1]} must be only 0s, 1s or 2s')
+    #                 else:
+    #                     valid = True
+    #     return help_words[0], help_words[1]

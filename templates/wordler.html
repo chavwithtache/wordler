@@ -1,67 +1,142 @@
 <!DOCTYPE html>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 <html>
-    <script>
+<script>
+    if ( window.history.replaceState ) {
+        window.history.replaceState( null, null, window.location.href );
+    }
 
-    </script>
-    <head>
-        <title>Wordler!</title>
-    </head>
-    <body>
 
-        <table style="font-family: Arial, sans-serif;font-size: clamp(16px, 5vw, 70px);max-width:500px;max-height:150px">
-            <tr style="max-height:50px">
+
+</script>
+<head>
+    <title>Wordler!</title>
+</head>
+<body style="background-color:LemonChiffon;font-family:Arial,sans-serif">
+<div>
+    <div class="font-size-5">
+        <table>
+            <tr>
                 {% for letter, col_code in zip("QWERTYUIOP",top_row) %}
-                {% set b_colour = {'0': 'black', '1': 'yellow', '2': 'green', '9': 'grey'}[col_code] %}
+                {% set b_colour = {'0': 'black', '1': 'yellow', '2': 'green', '9': 'LightGray'}[col_code] %}
                 {% set f_colour = {'0': 'white', '1': 'black', '2': 'white', '9': 'black'}[col_code] %}
-                    <td style="background-color:{{b_colour}};color:{{f_colour}};height:6vw;width:6vw" align="center">{{letter}}</td>
+                <td style="background-color:{{b_colour}};color:{{f_colour}};height:clamp(18px, 6vw, 54px);width:clamp(18px, 6vw, 54px)"
+                    align="center">
+                    {{letter}}
+                </td>
                 {% endfor %}
             </tr>
-            <tr style="max-height:50px">
+            <tr>
                 {% for letter, col_code in zip("ASDFGHJKL",second_row) %}
-                {% set b_colour = {'0': 'black', '1': 'yellow', '2': 'green', '9': 'grey'}[col_code] %}
+                {% set b_colour = {'0': 'black', '1': 'yellow', '2': 'green', '9': 'LightGray'}[col_code] %}
                 {% set f_colour = {'0': 'white', '1': 'black', '2': 'white', '9': 'black'}[col_code] %}
-                    <td style="background-color:{{b_colour}};color:{{f_colour}};height:6vw;width:6vw" align="center">{{letter}}</td>
+                <td style="background-color:{{b_colour}};color:{{f_colour}};height:clamp(18px, 6vw, 54px);width:clamp(18px, 6vw, 54px)"
+                    align="center">
+                    {{letter}}
+                </td>
                 {% endfor %}
             </tr>
-            <tr style="max-height:50px">
+            <tr>
+                <td></td>
                 {% for letter, col_code in zip("ZXCVBNM",third_row) %}
-                {% set b_colour = {'0': 'black', '1': 'yellow', '2': 'green', '9': 'grey'}[col_code] %}
+                {% set b_colour = {'0': 'black', '1': 'yellow', '2': 'green', '9': 'LightGray'}[col_code] %}
                 {% set f_colour = {'0': 'white', '1': 'black', '2': 'white', '9': 'black'}[col_code] %}
-                    <td style="background-color:{{b_colour}};color:{{f_colour}};height:6vw;width:6vw" align="center">{{letter}}</td>
+                <td style="background-color:{{b_colour}};color:{{f_colour}};height:clamp(18px, 6vw, 54px);width:clamp(18px, 6vw, 54px)"
+                    align="center">
+                    {{letter}}
+                </td>
                 {% endfor %}
             </tr>
         </table>
-        <br><br>
-        <form action="{{url}}" method="POST" autocomplete="off">
+    </div>
+    <br>
+
+    <form action="{{url}}" method="POST" autocomplete="off">
+        <div class="font-size-4 container">
             <input type="hidden" autocomplete="false"/>
-            <label style="font-family:Arial,sans-serif;font-size: clamp(16px, 4vw, 40px)">Guess <input style="font-family:Arial,sans-serif;font-size: clamp(16px, 4vw, 40px);max-width:400px" type="text" name="guess" autofocus/></label>
+            <label>Guess<input class="font-size-4 margin-left" type="text" name="guess" autofocus
+                               placeholder="Enter {{letters_in_word}} Letter Word"/></label>
+            <input type="hidden" name="letters_in_word" value={{letters_in_word}}>
             <input type="hidden" name="words" value={{words}}>
             <input type="hidden" name="pin" value={{pin}}>
-            <input type="hidden" value="submit"/>
-        </form>
+        </div>
+    </form>
 
-        <p style="font-family:Arial,sans-serif;font-size: 3.0vw">{{message}}</p>
 
-        <table style="font-family:Arial,sans-serif;font-size: clamp(16px, 10vw, 75px);max-width:500px">
+    <div class="font-size-3">
+        <p>{{message}}</p>
+    </div>
+    <div class="font-size-10">
+        <table>
             {% for key, value in words_and_scores.items() %}
-            <tr style="max-height:100px">
+            <tr>
                 {% for letter, col_code in zip(key,value) %}
                 {% set b_colour = {'0': 'black', '1': 'yellow', '2': 'green'}[col_code] %}
                 {% set f_colour = {'0': 'white', '1': 'black', '2': 'white'}[col_code] %}
-                    <td style="background-color:{{b_colour}};color:{{f_colour}};height:12vw;width:12vw" align="center">{{letter}}</td>
+                <td style="background-color:{{b_colour}};color:{{f_colour}};height:clamp(36px, 12vw, 108px);width:clamp(36px, 12vw, 108px)"
+                    align="center">
+                    {{letter}}
+                </td>
                 {% endfor %}
             </tr>
             {% endfor %}
         </table>
-<!--        <form action="{{url_for('new_game')}}">-->
-<!--            <input style="font-size: 4.0vh" type="submit" value="Reset" />-->
-<!--        </form>-->
-        <br><br>
-        <form action="{{url_for('start', pin=pin)}}" autocomplete="off">
+    </div>
+
+    <br><br><br>
+
+    <div class="font-size-3">
+        <table>
+            <tr>
+                <td>
+                    <form>
+
+                        <input type="hidden" autocomplete="false"/>
+                        <input type="hidden" name="pin" value=""/>
+                        <input type="hidden" name="letters_in_word" value="3"/>
+                        <input class="font-size-3" type="submit" value="New 3 Game"/>
+
+                    </form>
+                </td>
+                <td>
+                    <form>
+
+                        <input type="hidden" autocomplete="false"/>
+                        <input type="hidden" name="pin" value=""/>
+                        <input type="hidden" name="letters_in_word" value="5"/>
+                        <input class="font-size-3" type="submit" value="New 5 Game"/>
+
+                    </form>
+                </td>
+                <td>
+                    <form>
+
+                        <input type="hidden" autocomplete="false"/>
+                        <input type="hidden" name="pin" value=""/>
+                        <input type="hidden" name="letters_in_word" value="7"/>
+                        <input class="font-size-3" type="submit" value="New 7 Game"/>
+
+                    </form>
+                </td>
+            </tr>
+        </table>
+
+        <p>Or</p>
+
+        <form>
+
             <input type="hidden" autocomplete="false"/>
-            <label style="font-family:Arial,sans-serif;font-size: clamp(16px, 4vw, 40px)">PIN <input style="font-family:Arial,sans-serif;font-size: clamp(16px, 4vw, 40px);max-width:200px" type="text" name="pin" value="{{pin}}"/></label>
-            <input style="font-family:Arial,sans-serif;font-size: clamp(16px, 4vw, 40px)" type="submit" value="Reset" />
+            <div class="container">
+                <input type="hidden" name="letters_in_word" value="5"/>
+                <label>Reset from PIN:<input onClick="this.select();" class="font-size-3 margin-left" type="text"
+                                             name="pin" value="{{pin}}"/></label>
+            </div>
+
+
         </form>
-    </body>
+
+    </div>
+</div>
+</body>
 
 </html>

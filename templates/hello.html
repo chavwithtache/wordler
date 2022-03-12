@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ title }}</title>
+    </head>
+    <body>
+        <ul>
+        {% for member in members: %}
+            {% if member == name: %}
+            <li><b>{{ member }}</b></li>
+            {% else: %}
+            <li>{{ member }}</li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+    </body>
+</html>

@@ -12,35 +12,54 @@ def index():
 
 
 @app.route('/wordler')
-@app.route('/wordler/')
-def new_game():
+def root():
     w = Wordler()
-    w.reset_all()
+    w.reset_all(5)
     pin = w.pin
-    return redirect(f'{request.url_root}wordler/{pin}')
+    return redirect(f'{request.url_root}wordler/5/{pin}')
+
+@app.route('/wordler/<letters_in_word>')
+def new_game(letters_in_word):
+    w = Wordler()
+    w.reset_all(letters_in_word)
+    pin = w.pin
+    return redirect(f'{request.url_root}wordler/{letters_in_word}/{pin}')
 
 
-@app.route('/wordler/<pin>', methods=['GET', 'POST'])
-def start(pin):
+@app.route('/wordler/<letters_in_word>/<pin>', methods=['GET', 'POST'])
+def start(letters_in_word, pin):
+    letters_in_word=int(letters_in_word)
     w = Wordler()
     if pin=='':
         return redirect(f'{request.url_root}wordler')
     if request.query_string:
-        new_pin=request.query_string.decode().split('=')[1]
-        return redirect(f'{request.url_root}wordler/{new_pin}')
-    url = f'{request.url_root}wordler/{pin}'
+        qs_args = {a.split('=')[0]:a.split('=')[1] for a in request.query_string.decode().split('&')}
+        new_pin=qs_args['pin']
+        if len(new_pin)==5:
+            letters_in_word=7
+        elif len(new_pin) == 3:
+            letters_in_word = 3
+        elif len(new_pin)==4:
+            letters_in_word=5
+        else:
+            letters_in_word = qs_args.get('letters_in_word', 5)
+        if new_pin=='':
+            return redirect(f'{request.url_root}wordler/{letters_in_word}')
+        else:
+            return redirect(f'{request.url_root}wordler/{letters_in_word}/{new_pin}')
+    url = f'{request.url_root}wordler/{letters_in_word}/{pin}'
     message = ''
-    top_row = '9999999999'
-    second_row = '999999999'
-    third_row = '9999999'
+    # top_row = '9999999999'
+    # second_row = '999999999'
+    # third_row = '9999999'
     if request.method == 'GET':
         w.reset_all()
         words_and_scores = {}
         w.reset_from_pin(pin)
-        words_left=w.words_left
+        # words_left=w.words_left
 
     else:
-        guess_word = request.form['guess'].lower()
+        guess_word = request.form['guess'].lower().strip()
         words_str = request.form['words']
         words = [] if words_str == '' else words_str.split(',')
         pin = request.form['pin']
@@ -48,13 +67,15 @@ def start(pin):
         wl=w.words_left
         if guess_word == 'help':
             message = f'There are {len(wl)} possible words remaining {wl if len(wl) < 10 else str(wl[:10])[:-1] + ", ...]"}'
+        elif len(guess_word) != letters_in_word:
+            message = f'Word must have {letters_in_word} letters'
         elif guess_word not in w.allowed_words:
             message = f'Invalid word "{guess_word}"'
         else:
             result = w.guess(guess_word)
             words_and_scores[guess_word.upper()] = result
             wl=w.words_left
-            if result == '22222':
+            if result == '2'* letters_in_word:
                 message= f'Congratulations! you did it in {len(words_and_scores)} goes.'
             else:
                 message = f'There are {len(wl)} possible words remaining.'
@@ -70,6 +91,7 @@ def start(pin):
                            words_and_scores=words_and_scores,
                            words=','.join(list(words_and_scores.keys())),
                            pin=pin,
+                           letters_in_word=letters_in_word,
                            message=message,
                            top_row=top_row,
                            second_row=second_row,
