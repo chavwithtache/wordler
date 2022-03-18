@@ -7,13 +7,49 @@
     }
 
 
-
 </script>
 <head>
     <title>Wordler!</title>
 </head>
-<body style="background-color:LemonChiffon;font-family:Arial,sans-serif">
+<body style="background-color:mistyrose;font-family:Arial,sans-serif">
 <div>
+    <div class="font-size-3">
+        <table>
+            <tr>
+                <td>
+                    <form>
+
+                        <input type="hidden" autocomplete="false"/>
+                        <input type="hidden" name="pin" value=""/>
+                        <input type="hidden" name="letters_in_word" value="3"/>
+                        <input class="font-size-3 button-10" type="submit" value="New 3 Game"/>
+
+
+                    </form>
+                </td>
+                <td>
+                    <form>
+
+                        <input type="hidden" autocomplete="false"/>
+                        <input type="hidden" name="pin" value=""/>
+                        <input type="hidden" name="letters_in_word" value="5"/>
+                        <input class="font-size-3 button-10" type="submit" value="New 5 Game"/>
+
+                    </form>
+                </td>
+                <td>
+                    <form>
+
+                        <input type="hidden" autocomplete="false"/>
+                        <input type="hidden" name="pin" value=""/>
+                        <input type="hidden" name="letters_in_word" value="7"/>
+                        <input class="font-size-3 button-10" type="submit" value="New 7 Game"/>
+
+                    </form>
+                </td>
+            </tr>
+        </table>
+        <br>
     <div class="font-size-5">
         <table>
             <tr>
@@ -62,12 +98,12 @@
         </div>
     </form>
 
-
-    <div class="font-size-2">
+    <div class="my-blue-paragraph font-size-3">
         {% for m in message %}
-            <p style="color:darkblue">{{m}}</p>
+        <p>{{m}}</p>
         {% endfor %}
     </div>
+
     <div class="font-size-10">
         <table>
             {% for key, value in words_and_scores.items() %}
@@ -85,46 +121,13 @@
         </table>
     </div>
 
-    <br><br><br>
 
-    <div class="font-size-3">
-        <table>
-            <tr>
-                <td>
-                    <form>
 
-                        <input type="hidden" autocomplete="false"/>
-                        <input type="hidden" name="pin" value=""/>
-                        <input type="hidden" name="letters_in_word" value="3"/>
-                        <input class="font-size-3" type="submit" value="New 3 Game"/>
 
-                    </form>
-                </td>
-                <td>
-                    <form>
-
-                        <input type="hidden" autocomplete="false"/>
-                        <input type="hidden" name="pin" value=""/>
-                        <input type="hidden" name="letters_in_word" value="5"/>
-                        <input class="font-size-3" type="submit" value="New 5 Game"/>
-
-                    </form>
-                </td>
-                <td>
-                    <form>
-
-                        <input type="hidden" autocomplete="false"/>
-                        <input type="hidden" name="pin" value=""/>
-                        <input type="hidden" name="letters_in_word" value="7"/>
-                        <input class="font-size-3" type="submit" value="New 7 Game"/>
-
-                    </form>
-                </td>
-            </tr>
-        </table>
-
-        <p>Or</p>
-
+        <br><br>
+<!--        <div>-->
+<!--            <p>Or</p>-->
+<!--        </div>-->
         <form>
 
             <input type="hidden" autocomplete="false"/>

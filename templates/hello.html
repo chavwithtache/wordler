@@ -1,17 +1,51 @@
 <!DOCTYPE html>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles2.css') }}">
 <html>
-    <head>
-        <title>{{ title }}</title>
-    </head>
-    <body>
-        <ul>
-        {% for member in members: %}
-            {% if member == name: %}
-            <li><b>{{ member }}</b></li>
-            {% else: %}
-            <li>{{ member }}</li>
-            {% endif %}
-        {% endfor %}
-        </ul>
-    </body>
+<head>
+    <title>Test</title>
+</head>
+<body style="background-color:mistyrose;font-family:Arial,sans-serif">
+<div class="container">
+    <div class="font-size-3b centre">
+        <p>hello</p>
+    </div>
+    <div class="font-size-3b centre">
+        <table>
+            <tr>
+                <td>
+                    <form>
+
+                        <input type="hidden" autocomplete="false"/>
+                        <input type="hidden" name="pin" value=""/>
+                        <input type="hidden" name="letters_in_word" value="3"/>
+                        <input class="font-size-3 button-10" type="submit" value="New 3 Game"/>
+
+
+                    </form>
+                </td>
+                <td>
+                    <form>
+
+                        <input type="hidden" autocomplete="false"/>
+                        <input type="hidden" name="pin" value=""/>
+                        <input type="hidden" name="letters_in_word" value="5"/>
+                        <input class="font-size-3 button-10" type="submit" value="New 5 Game"/>
+
+                    </form>
+                </td>
+                <td>
+                    <form>
+
+                        <input type="hidden" autocomplete="false"/>
+                        <input type="hidden" name="pin" value=""/>
+                        <input type="hidden" name="letters_in_word" value="7"/>
+                        <input class="font-size-3 button-10" type="submit" value="New 7 Game"/>
+
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
 </html>

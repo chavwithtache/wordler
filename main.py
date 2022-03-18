@@ -6,20 +6,23 @@ app = Flask(__name__)
 app.secret_key = 'fdslkfgjslgj'
 
 
-@app.route('/')
-def index():
-    return 'Under Construction'
 
+@app.route('/')
+def root():
+    return redirect(f'{request.url_root}wordler/5')
+
+@app.route('/test')
+def test():
+    return render_template('hello.html')
 
 @app.route('/wordler')
-def root():
-    w = Wordler()
-    w.reset_all(5)
-    pin = w.pin
-    return redirect(f'{request.url_root}wordler/5/{pin}')
+def wdlr():
+    return redirect(f'{request.url_root}wordler/5')
 
 @app.route('/wordler/<letters_in_word>')
 def new_game(letters_in_word):
+    if len(letters_in_word) > 1:
+        return redirect(f'{request.url_root}wordler/5')
     w = Wordler()
     w.reset_all(letters_in_word)
     pin = w.pin
@@ -100,8 +103,6 @@ def start(letters_in_word, pin):
                            second_row=second_row,
                            third_row=third_row,
                            zip=zip)
-
-
 
 
 app.run(host='0.0.0.0', port=81)

@@ -2,13 +2,28 @@ p {
   margin: 0.5em;
 }
 
+body { /* can also be whatever container */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  overflow: hidden;
+}
 .margin-left {
     margin-left:clamp(6px, 2vw, 18px)
 }
 
+.centre {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
 .container {
-  display: grid;
-  grid-template-columns: 1fr;
+  xgrid-template-columns: 1fr;
+  width: clamp(100px, 100vw, 750px);
+  background-color:yellow
 }
 
 .my-blue-paragraph {
@@ -24,6 +39,9 @@ p {
 
 .font-size-3 {
  font-size: clamp(9px, 3vw, 27px)
+}
+.font-size-3b {
+ font-size: 3rem;
 }
 
 .font-size-4 {
