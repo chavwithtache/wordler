@@ -5,15 +5,13 @@
     if ( window.history.replaceState ) {
         window.history.replaceState( null, null, window.location.href );
     }
-
-
 </script>
 <head>
     <title>Wordler!</title>
 </head>
-<body style="background-color:mistyrose;font-family:Arial,sans-serif">
-<div>
-    <div class="font-size-3">
+<body style="background-color:whitesmoke;font-family:Arial,sans-serif">
+<div class="container">
+    <div class="centre">
         <table>
             <tr>
                 <td>
@@ -22,7 +20,7 @@
                         <input type="hidden" autocomplete="false"/>
                         <input type="hidden" name="pin" value=""/>
                         <input type="hidden" name="letters_in_word" value="3"/>
-                        <input class="font-size-3 button-10" type="submit" value="New 3 Game"/>
+                        <input class="font-size-2-5 button-10" type="submit" value="New 3 Game"/>
 
 
                     </form>
@@ -33,7 +31,7 @@
                         <input type="hidden" autocomplete="false"/>
                         <input type="hidden" name="pin" value=""/>
                         <input type="hidden" name="letters_in_word" value="5"/>
-                        <input class="font-size-3 button-10" type="submit" value="New 5 Game"/>
+                        <input class="font-size-2-5 button-10" type="submit" value="New 5 Game"/>
 
                     </form>
                 </td>
@@ -43,77 +41,75 @@
                         <input type="hidden" autocomplete="false"/>
                         <input type="hidden" name="pin" value=""/>
                         <input type="hidden" name="letters_in_word" value="7"/>
-                        <input class="font-size-3 button-10" type="submit" value="New 7 Game"/>
+                        <input class="font-size-2-5 button-10" type="submit" value="New 7 Game"/>
 
                     </form>
                 </td>
             </tr>
         </table>
-        <br>
-    <div class="font-size-5">
+    </div>
+    <br>
+    <div class="font-size-3 centre">
         <table>
             <tr>
                 {% for letter, col_code in zip("QWERTYUIOP",top_row) %}
-                {% set b_colour = {'0': 'black', '1': 'yellow', '2': 'green', '9': 'LightGray'}[col_code] %}
+                {% set b_colour = {'0': 'black', '1': 'gold', '2': 'green', '9': 'LightGray'}[col_code] %}
                 {% set f_colour = {'0': 'white', '1': 'black', '2': 'white', '9': 'black'}[col_code] %}
-                <td style="background-color:{{b_colour}};color:{{f_colour}};height:clamp(18px, 6vw, 54px);width:clamp(18px, 6vw, 54px)"
+                <td style="background-color:{{b_colour}};color:{{f_colour}};height:clamp(21px, 7vw, 63px);width:clamp(21px, 7vw, 63px)"
                     align="center">
-                    {{letter}}
+                    <b>{{letter}}</b>
                 </td>
                 {% endfor %}
             </tr>
             <tr>
                 {% for letter, col_code in zip("ASDFGHJKL",second_row) %}
-                {% set b_colour = {'0': 'black', '1': 'yellow', '2': 'green', '9': 'LightGray'}[col_code] %}
+                {% set b_colour = {'0': 'black', '1': 'gold', '2': 'green', '9': 'LightGray'}[col_code] %}
                 {% set f_colour = {'0': 'white', '1': 'black', '2': 'white', '9': 'black'}[col_code] %}
-                <td style="background-color:{{b_colour}};color:{{f_colour}};height:clamp(18px, 6vw, 54px);width:clamp(18px, 6vw, 54px)"
+                <td style="background-color:{{b_colour}};color:{{f_colour}};height:clamp(21px, 7vw, 63px);width:clamp(21px, 7vw, 63px)"
                     align="center">
-                    {{letter}}
+                    <b>{{letter}}</b>
                 </td>
                 {% endfor %}
             </tr>
             <tr>
                 <td></td>
                 {% for letter, col_code in zip("ZXCVBNM",third_row) %}
-                {% set b_colour = {'0': 'black', '1': 'yellow', '2': 'green', '9': 'LightGray'}[col_code] %}
+                {% set b_colour = {'0': 'black', '1': 'gold', '2': 'green', '9': 'LightGray'}[col_code] %}
                 {% set f_colour = {'0': 'white', '1': 'black', '2': 'white', '9': 'black'}[col_code] %}
-                <td style="background-color:{{b_colour}};color:{{f_colour}};height:clamp(18px, 6vw, 54px);width:clamp(18px, 6vw, 54px)"
+                <td style="background-color:{{b_colour}};color:{{f_colour}};height:clamp(21px, 7vw, 63px);width:clamp(21px, 7vw, 63px)"
                     align="center">
-                    {{letter}}
+                    <b>{{letter}}</b>
                 </td>
                 {% endfor %}
             </tr>
         </table>
     </div>
     <br>
-
-    <form action="{{url}}" method="POST" autocomplete="off">
-        <div class="font-size-4 container">
-            <input type="hidden" autocomplete="false"/>
-            <label>Guess<input class="font-size-4 margin-left" type="text" name="guess" autofocus
-                               placeholder="Enter {{letters_in_word}} Letter Word"/></label>
-            <input type="hidden" name="letters_in_word" value={{letters_in_word}}>
-            <input type="hidden" name="words" value={{words}}>
-            <input type="hidden" name="pin" value={{pin}}>
-        </div>
-    </form>
-
-    <div class="my-blue-paragraph font-size-3">
-        {% for m in message %}
-        <p>{{m}}</p>
-        {% endfor %}
+    <div class="font-size-2-5 centre">
+        <form action="{{url}}" method="POST" autocomplete="off">
+<!--            <div class="font-size-4 container-for-inputs centre">-->
+            <div class="container-for-inputs">
+                <input type="hidden" autocomplete="false"/>
+                <label>Guess<input class="font-size-2-5 margin-left" type="text" name="guess" autofocus
+                                   placeholder="Enter {{letters_in_word}} Letter Word"/></label>
+                <input type="hidden" name="letters_in_word" value={{letters_in_word}}>
+                <input type="hidden" name="words" value={{words}}>
+                <input type="hidden" name="pin" value={{pin}}>
+            </div>
+        </form>
     </div>
 
-    <div class="font-size-10">
+<br>
+    <div class="font-size-6 centre">
         <table>
             {% for key, value in words_and_scores.items() %}
             <tr>
                 {% for letter, col_code in zip(key,value) %}
-                {% set b_colour = {'0': 'black', '1': 'yellow', '2': 'green'}[col_code] %}
+                {% set b_colour = {'0': 'black', '1': 'gold', '2': 'green'}[col_code] %}
                 {% set f_colour = {'0': 'white', '1': 'black', '2': 'white'}[col_code] %}
-                <td style="background-color:{{b_colour}};color:{{f_colour}};height:clamp(36px, 12vw, 108px);width:clamp(36px, 12vw, 108px)"
+                <td style="background-color:{{b_colour}};color:{{f_colour}};height:clamp(39px, 13vw, 117px);width:clamp(39px, 13vw, 117px)"
                     align="center">
-                    {{letter}}
+                    <b>{{letter}}</b>
                 </td>
                 {% endfor %}
             </tr>
@@ -121,19 +117,20 @@
         </table>
     </div>
 
+    <div class="my-blue-paragraph font-size-1-5 centre">
+        {% for m in message %}
+        <p>{{m}}</p>
+        {% endfor %}
+    </div>
+    <br><br>
 
-
-
-        <br><br>
-<!--        <div>-->
-<!--            <p>Or</p>-->
-<!--        </div>-->
+    <div class="font-size-2 centre">
         <form>
 
             <input type="hidden" autocomplete="false"/>
-            <div class="container">
+            <div class="container-for-inputs">
                 <input type="hidden" name="letters_in_word" value="5"/>
-                <label>Reset from PIN:<input onClick="this.select();" class="font-size-3 margin-left" type="text"
+                <label>Reset from PIN:<input onClick="this.select();" class="font-size-2 margin-left" type="number"
                                              name="pin" value="{{pin}}"/></label>
             </div>
 

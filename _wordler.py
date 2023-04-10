@@ -2,6 +2,7 @@ import random
 import json
 from datetime import date
 from dataclasses import dataclass
+from pathlib import Path
 
 
 class Wordler(object):
@@ -21,14 +22,16 @@ class Wordler(object):
         yellow_letters: str = ''
         green_letters: str = ''
 
-    def reset_all(self, letters_in_word:int = 5):
-        with open(f'result_words_{letters_in_word}.json', 'r') as f:
+    def reset_all(self, letters_in_word:int = 5, result_word: str = None):
+        with open(f'{Path(__file__).parent}/result_words_{letters_in_word}.json', 'r') as f:
             self.result_words = json.load(f)
-        with open(f'allowed_words_{letters_in_word}.json', 'r') as f:
+        with open(f'{Path(__file__).parent}/allowed_words_{letters_in_word}.json', 'r') as f:
             self.allowed_words = json.load(f)
         self.letters_in_word= int(letters_in_word)
         self.words_left = [w for w in self.result_words]
-        self.result_word = random.choice(self.result_words)
+        if result_word is not None and result_word not in self.result_words:
+            raise ValueError(f'word "{result_word}" is not in the allowed list of result words.')
+        self.result_word = result_word if result_word is not None else random.choice(self.result_words)
         self.pin = self.get_pin_from_result_word(self.result_word)
         self.letters = self.Letters()
 

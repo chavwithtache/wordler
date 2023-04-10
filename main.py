@@ -6,22 +6,29 @@ app = Flask(__name__)
 app.secret_key = 'fdslkfgjslgj'
 
 
-
 @app.route('/')
+def index():
+    return redirect(f'{request.url_root}wordler/5')
+
+@app.route('/wordler')
 def root():
     return redirect(f'{request.url_root}wordler/5')
 
-@app.route('/test')
-def test():
-    return render_template('hello.html')
-
-@app.route('/wordler')
-def wdlr():
-    return redirect(f'{request.url_root}wordler/5')
+@app.route('/wordlerTest/<letters_in_word>/<result_word>')
+def test_result_word(letters_in_word,result_word):
+    w = Wordler()
+    message=''
+    try:
+        w.reset_all(letters_in_word,result_word)
+    except ValueError as e:
+        message=str(e)
+        w.reset_all(letters_in_word)
+    pin = w.pin
+    return start(letters_in_word,str(pin),message)
 
 @app.route('/wordler/<letters_in_word>')
 def new_game(letters_in_word):
-    if len(letters_in_word) > 1:
+    if len(letters_in_word)>1:
         return redirect(f'{request.url_root}wordler/5')
     w = Wordler()
     w.reset_all(letters_in_word)
@@ -30,7 +37,7 @@ def new_game(letters_in_word):
 
 
 @app.route('/wordler/<letters_in_word>/<pin>', methods=['GET', 'POST'])
-def start(letters_in_word, pin):
+def start(letters_in_word, pin, message:str = None):
     letters_in_word=int(letters_in_word)
     w = Wordler()
     show_definition=True
@@ -52,7 +59,7 @@ def start(letters_in_word, pin):
         else:
             return redirect(f'{request.url_root}wordler/{letters_in_word}/{new_pin}')
     url = f'{request.url_root}wordler/{letters_in_word}/{pin}'
-    message = ''
+    message = [] if message is None else [message]
     # top_row = '9999999999'
     # second_row = '999999999'
     # third_row = '9999999'
@@ -82,7 +89,10 @@ def start(letters_in_word, pin):
             if result == '2'* letters_in_word:
                 message= [f'Congratulations! you did it in {len(words_and_scores)} goes.']
             else:
-                message = [f'There are {len(wl)} possible words remaining.']
+                if len(wl) == 1:
+                    message = ['There is just 1 possible word remaining.']
+                else:
+                    message = [f'There are {len(wl)} possible words remaining.']
             if show_definition:
                 if show_definition is True:
                     message = get_word_definition(guess_word) + message
