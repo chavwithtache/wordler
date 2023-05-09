@@ -1,15 +1,19 @@
 import openai
+import re
 
-openai.api_key  = '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'
+openai.api_key = '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'
 
 
 def get_completion(prompt, model="gpt-3.5-turbo"):
     messages = [{"role": "user", "content": prompt}]
-    response = openai.ChatCompletion.create(
-        model=model,
-        messages=messages,
-        temperature=0.2,  # this is the degree of randomness of the model's output
-    )
+    try:
+        response = openai.ChatCompletion.create(
+            model=model,
+            messages=messages,
+            temperature=0.2,  # this is the degree of randomness of the model's output
+        )
+    except Exception as e:
+        return "Having some technical issues. You'll have to do without clues for now!"
     return response.choices[0].message["content"]
 
 
@@ -18,7 +22,9 @@ def user_question(question: str, word: str):
         The user is trying to guess this word: '{word}'. Their question relating to the word 
         is the following delimited by ```.
         ```{question}```
-        The response should be a statement, not a question. The response should NOT include the word '{word}'.
+        The response should be a statement, not a question.
         """
+
     response = get_completion(prompt)
+    response = re.sub(word, '*' * len(word), response, flags=re.IGNORECASE)
     return response
