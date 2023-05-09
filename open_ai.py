@@ -1,7 +1,7 @@
 import openai
 import re
 
-openai.api_key = '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'
+openai.api_key = ''
 
 
 def get_completion(prompt, model="gpt-3.5-turbo"):
