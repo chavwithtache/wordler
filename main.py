@@ -86,12 +86,8 @@ def start(letters_in_word, pin, message: str = None):
                 f'There are {len(wl)} possible words remaining {wl if len(wl) < 10 else str(wl[:10])[:-1] + ", ...]"}']
         elif ' ' in guess_word:
             message = [user_question(guess_word, w.result_word)]
-        elif guess_word[:4] == 'clue':
-            if len(guess_word) > 4 and guess_word[4] == ':':
-                question = guess_word[5:]
-            else:
-                question = 'give me a clue'
-            message = [user_question(question, w.result_word)]
+        elif guess_word == 'clue':
+            message = [user_question('give me a clue', w.result_word)]
         elif len(guess_word) != letters_in_word:
             message = [f'Word must have {letters_in_word} letters']
         elif guess_word not in w.allowed_words:
