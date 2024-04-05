@@ -120,3 +120,5 @@ def start(letters_in_word, pin, message: str = None):
                            second_row=second_row,
                            third_row=third_row,
                            zip=zip)
+
+app.run(host='0.0.0.0', port=81)
