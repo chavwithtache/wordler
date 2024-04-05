@@ -82,8 +82,7 @@ def start(letters_in_word, pin, message: str = None):
         words_and_scores = w.set_and_return_words_and_scores(pin=pin, words=words)
         wl = w.words_left
         if guess_word == 'help':
-            message = [
-                f'There are {len(wl)} possible words remaining {wl if len(wl) < 10 else str(wl[:10])[:-1] + ", ...]"}']
+            message = [f'There are {len(wl)} possible words remaining {wl if len(wl) < 10 else str(wl[:10])[:-1] + ", ...]"}']
         elif ' ' in guess_word:
             message = [user_question(guess_word, w.result_word)]
         elif guess_word == 'clue':
@@ -121,6 +120,3 @@ def start(letters_in_word, pin, message: str = None):
                            second_row=second_row,
                            third_row=third_row,
                            zip=zip)
-
-
-app.run(host='0.0.0.0', port=81)
