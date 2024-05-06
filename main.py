@@ -2,7 +2,7 @@ from flask import Flask, request, redirect
 from flask import render_template
 from _wordler import Wordler
 from get_definition import get_word_definition
-from open_ai import user_question
+from open_ai import user_question, define_word
 
 app = Flask(__name__)
 app.secret_key = 'fdslkfgjslgj'
@@ -104,7 +104,8 @@ def start(letters_in_word, pin, message: str = None):
                     message = [f'There are {len(wl)} possible words remaining.']
             if show_definition:
                 if show_definition is True:
-                    message = get_word_definition(guess_word) + message
+                    message = [f"'{guess_word.capitalize()}': {define_word(guess_word)}"] + message
+                    #message = get_word_definition(guess_word) + message
     top_row = w.get_letters('QWERTYUIOP')
     second_row = w.get_letters('ASDFGHJKL')
     third_row = w.get_letters('ZXCVBNM')
